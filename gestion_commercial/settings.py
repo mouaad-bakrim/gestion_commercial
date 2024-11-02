@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -25,22 +26,45 @@ SECRET_KEY = 'django-insecure-t!e4pl7))585odthz-#(!wn_61f%t^ed0598pi4-gz__4r=e)^
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
+LOGOUT_URL = '/logout/'
+
 
 
 # Application definition
-
 INSTALLED_APPS = [
+    "admin_interface",
+    "colorfield",
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'base',
+    'client',
+    'stock',
+    'django_fsm',
+    'django_htmx',
+    'crispy_forms',
+    'crispy_bootstrap4',
+    'django_tables2',
+    'debug_toolbar',
+    'rest_framework',
+    'zone',
+    'vehicule',
+    'produit',
+    'dashboard',
+    'venteAchats',
+    'commande',
+
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -75,7 +99,7 @@ WSGI_APPLICATION = 'gestion_commercial.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'gestion_commercial',
+        'NAME': 'commercial',
         'USER': 'postgres',
         'PASSWORD': 'orange..206',
         'HOST': 'localhost',
@@ -87,6 +111,8 @@ DATABASES = {
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
+
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -125,3 +151,27 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+
+DJANGO_TABLES2_TEMPLATE = "django_tables2/bootstrap5.html"
+
+DJANGO_TABLES2_TABLE_ATTRS = {
+    "class":"table border table-borderless align-middle table-hover text-gray-700 fs-6 gy-2 gx-1 table-striped border-gray-300 ",
+    'tfoot': {
+        'class': 'bg-light-dark border-top-2 border-bottom-1 border-gray-300 gy-2 fs-6 fw-bolder text-nowrap text-gray-800',
+    },
+    'thead': {
+        'class': ' h-20px bg-light-dark border-top-1 border-bottom-2 border-left-1 border-right-1 fw-bolder border-gray-300 gy-2 fs-7 text-uppercase',
+    },
+    "tbody": {
+        "class": "border-top-1",
+    },
+}

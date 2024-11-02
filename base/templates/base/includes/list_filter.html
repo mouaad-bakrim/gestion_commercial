@@ -1,0 +1,68 @@
+{% load crispy_forms_tags %}
+
+{% if filter %}
+<div class="p-0  mb-5 order-1 order-xxl-5 w-100 w-xxl-300px align-self-start ms-xxl-5 mb-xxl-5 float-xxl-end
+            collapse  shadow-sm
+            {% if user.profile and user.profile.filter_menu_expanded %}show {% endif %}"
+id="filterCard" >
+<div id="filterCardInt" class="card
+{% comment %} position-xxxl-fixed vh-100 {% endcomment %}
+"
+>
+    <!--begin::Card header-->
+    <div class="card-header d-xxl-flex justify-content-between align-items-center px-5 min-w-xxl-300px">
+        <h3 class="card-title">
+            <span class="card-label fw-bolder text-gray-600 p-0">Filtre</span>
+        </h3>
+
+        <div class="card-toolbar pe-0 my-0">
+            <a href="#" class="btn btn-sm btn-icon-gray-500 btn-text-primary no-bg"  onclick="toggleFilterCard()">
+                <span class="svg-icon svg-icon-1">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor"></rect>
+                        <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor"></rect>
+                    </svg>
+                </span>
+            </a>
+        </div>
+    </div>
+    <!--end::Card header-->
+    <!--begin::Card body-->
+    <form
+        autocomplete="off"
+        id="filterForm"
+        hx-get=""
+        hx-target="#list_table_id"
+        method="get"
+        hx-replace-url="false"
+        hx-indicator=".table_progress"
+        hx-include="#per_page_select_id"
+        hx-swap="outerHTML">
+        {% csrf_token %}
+        <div class="card-body pb-0 px-5">
+            <div class="d-flex flex-column flex-lg-row flex-xxl-column gap-3 gap-xxl-5 justify-content-start d-flex justify-content-xxl-start ">
+                {% comment %} flex-lg-row {% endcomment %}
+                {% crispy filter.form filter.form.helper %}
+                {% comment %} <input type="hidden" name="per_page" value="{{ per_page | safe }}" id="per_page_input_id"> {% endcomment %}
+            </div>
+
+        </div>
+        <!--end::Card body-->
+        <div class="card-footer d-flex justify-content-end justify-content-xxl-evenly gap-5 px-5 py-2 py-xxl-5 border-0 ">
+            {% comment %} <a href="#" onclick="reset_filter();" class="btn btn-light me-3">Réinitialiser</a> {% endcomment %}
+            <a  hx-get=""
+                hx-target="#list_table_id"
+                hx-swap="outerHTML"
+                hx-indicator=".table_progress"
+                hx-include="#per_page_select_id"
+                hx-on::after-request="reset_filter();"
+                class="btn btn-light me-3 btn-sm w-25 w-xxl-100"
+            > Réinitialiser</a>
+            <button type="submit" class="btn btn-primary btn-sm w-25 w-xxl-100" id="kt_careers_submit_button"><i class="fas fa-filter"></i>
+               Filtrer
+            </button>
+        </div>
+    </form>
+</div>
+</div>
+{% endif %}

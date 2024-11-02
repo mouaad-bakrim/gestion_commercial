@@ -1,0 +1,132 @@
+
+{% load django_tables2 %}
+
+<main class="col-sm col pt-0 order-3 order-xxl-1 p-0 mt-4" id="main-table">
+<div class="card mb-md-5 mb-xl-10 card-flush shadow-sm" id="list_table_id">
+    <!--begin::Card header-->
+    <div class="card-header">
+        <div class="card-title w-100 mx-0">
+            <div class=" d-flex flex-row justify-content-between  w-100 align-items-center ">
+                <div class=" d-flex align-items-center ">
+                    <div class="page-item d-none d-md-block fs-6 text-gray-400">
+                        Lignes&nbsp;:
+                    </div>
+                    <select class="form-select tiny-select form-select-solid" id="per_page_select_id"
+                        hx-get=""
+                        hx-trigger="change"
+                        hx-target="#list_table_id"
+                        hx-swap="outerHTML"
+                        hx-indicator=".table_progress"
+                        hx-replace-url="false"
+                        hx-include="#filterForm"
+                        name="per_page">
+                        <option value="20" {% if per_page == "20" or per_page == 20 %} selected {% endif%} >20</option>
+                        <option value="50" {% if per_page == "50" or per_page == 50 %} selected {% endif%} >50</option>
+                        <option value="100" {% if per_page == '100' or per_page == 100 %} selected {% endif%} >100</option>
+                        <option value="200" {% if per_page == '200' or per_page == 200 %} selected {% endif%} >200</option>
+                        <option value="500" {% if per_page == '500' or per_page == 500 %} selected {% endif%} >500</option>
+                        <option value="1000" {% if per_page == '1000' or per_page == 1000 %} selected {% endif%} >1000</option>
+                        <option value="5000" {% if per_page == '5000' or per_page == 5000 %} selected {% endif%} >5000</option>
+
+                    </select>
+                </div>
+                <div class=" d-flex align-items-center">
+                    <ul class="pagination" id="pagination_id" page="{{table.page.number | safe}}">
+                        {% if table.page.has_previous %}
+                        {% comment %} <li class="page-item previous"><a href="{% querystring table.prefixed_page_field=table.page.previous_page_number %}"  class="page-link"><i class="previous"></i></a></li> {% endcomment %}
+                            <li class="previous page-item ">
+                                <div hx-get="{% querystring table.prefixed_page_field=table.page.previous_page_number %}"
+                                    hx-trigger="click"
+                                    hx-target="#list_table_id"
+                                    hx-swap="outerHTML"
+                                    hx-indicator=".table_progress"
+                                    class="page-link px-0">
+                                    <a href="#" class="page-link"><i class="fa fa-chevron-left"></i></a>
+                                </div>
+                            </li>
+                        {% else %}
+                        <li class="page-item previous disabled px-0"><a href="#" class="page-link"><i class="fa fa-chevron-left"></i></a></li>
+                        {% endif %}
+
+                        <li class="page-item disabled">
+                            <span  class="page-link">Page {{table.page.number}} / {{ table.paginator.num_pages }}<span class="d-none d-sm-block ">&nbsp;- {{ table.rows | length }} éléments </span></span>
+                        </li>
+
+                        {% if table.page.has_next %}
+                            {% comment %} <li class="page-item next"><a href="{% querystring table.prefixed_page_field=table.page.next_page_number %}"  class="page-link"><i class="next"></i></a></li> {% endcomment %}
+                            <li class="next page-item">
+                                <div hx-get="{% querystring table.prefixed_page_field=table.page.next_page_number %}"
+                                    hx-trigger="click"
+                                    hx-target="#list_table_id"
+                                    hx-swap="outerHTML"
+                                    hx-indicator=".table_progress"
+                                    class="page-link px-0"
+                                    >
+                                    <span class="page-link"><i class="fa fa-chevron-right"></i></span>
+                                </div>
+                            </li>
+                        {% else %}
+                            <li class="page-item next disabled"><a href="#" class="page-link"><i class="fa fa-chevron-right"></i></a></li>
+                        {% endif %}
+
+                    </ul>
+                </div>
+
+                <div class="me-0 my-0">
+                    <div id ="filter_toggle_button_id">
+                    {% if filter %}
+                    <a href="#" class="btn btn-sm btn-icon-gray-600 btn-text-primary btn-bg-light p-3 mx-0"
+                        {% comment %} data-bs-toggle="collapse" data-bs-target="#filterCard"  role="button"
+                        {% if user.profile and user.profile.filter_menu_expanded %} aria-expanded="true" {% endif %} {% endcomment %}
+                        {% comment %} onclick="document.getElementById('funnel-icon-id').classList.toggle('bi-funnel');document.getElementById('funnel-icon-id').classList.toggle('bi-funnel-fill');" {% endcomment %}
+                        id="funnel-toggle-id" onclick="toggleFilterCard()"
+                        >
+                        <i class="bi bi-funnel{% if user.profile and user.profile.filter_menu_expanded %}-fill {% endif %} fs-2 icon" id="funnel-icon-id"></i>
+                    </a>
+                    {% endif %}
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!--end::Card header-->
+    <!--begin::Card body-->
+    <div class="card-body pt-0">
+        <!--begin::Table-->
+        <div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap5">
+            <div class="table-responsive">
+                {% include "base/includes/base_table.html" %}
+            </div>
+        </div>
+        <!--end::Table-->
+    </div>
+    <!--end::Card body-->
+</div>
+</main>
+<script>
+    function toggleFilterCard() {
+        var filterCard = document.getElementById('filterCard');
+        var funnelIcon = document.getElementById('funnel-icon-id');
+        var element = document.getElementById('someId');
+        element.indeterminate = true;
+
+        var checkbox = document.getElementById('myCheckbox');
+if (checkbox) {
+    checkbox.indeterminate = true;
+}
+        if (filterCard.classList.contains('collapse')) {
+            filterCard.classList.remove('collapse');
+            funnelIcon.classList.remove('bi-funnel');
+            funnelIcon.classList.add('bi-funnel-fill');
+        } else {
+            filterCard.classList.add('collapse');
+            funnelIcon.classList.remove('bi-funnel-fill');
+            funnelIcon.classList.add('bi-funnel');
+        }
+
+        // Enregistrer l'état du menu filtre côté serveur
+        var isExpanded = !filterCard.classList.contains('collapse');
+        fetch(`/save_filter_state/${isExpanded ? 'true' : 'false'}`, { method: 'GET' });
+    }
+</script>

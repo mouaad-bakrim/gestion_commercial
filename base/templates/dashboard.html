@@ -1,0 +1,141 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% block title %}Bienvenue sur {% endblock %}
+
+
+{% block css %}
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .card-flush {
+            border: none;
+        }
+        .card-header {
+            border-bottom: 1px solid #eaeaea;
+        }
+        .table-light th {
+            background-color: #f8f9fa;
+        }
+        .fs-7 {
+            font-size: 0.875rem;
+        }
+        .fs-6 {
+            font-size: 1rem;
+        }
+        .fs-3x {
+            font-size: 1.875rem;
+        }
+        .badge-light-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .badge-light-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .badge-light-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .card {
+    border-radius: 0.5rem; /* Bordures plus arrondies */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Bordure légère */
+}
+
+    </style>
+
+{% endblock css %}
+
+{% block toolbar %}
+
+
+
+<div id="kt_app_toolbar" class="app-toolbar mt-1" style="height: 50px;">
+    <!--begin::Toolbar container-->
+  <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+    <!--begin::Page title-->
+    <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+        <!--begin::Title-->
+<h1 class="page-heading d-flex text-gray-700 fw-bold fs-5 flex-column justify-content-center my-0">
+    {% if user_sites.count == 1 %}
+        Tableau de bord: {{ user_sites.first.nom }}
+    {% else %}
+        Tableau de bord: Administrateur
+    {% endif %}
+</h1>        <!--end::Title-->
+        <!--begin::Date-->
+        <h2 class="text-gray-600 fw-normal fs-6 my-0">Date: {{ date_yesterday|date:"d-m-Y" }}</h2>
+        <!--end::Date-->
+        <!--begin::Breadcrumb-->
+    </div>
+    <!--end::Page title-->
+</div>
+
+
+
+      {% if request.user.profile.role == 'superadmin' %}
+<form method="POST" id="filter-form">
+    {% csrf_token %}
+    <div class="d-flex align-items-center gap-2 me-4" style="height: 100%;">
+        <!-- Site Selection -->
+        <div class="d-flex align-items-center">
+            <select name="site_id" style="width:100%" class="form-select form-select-sm form-select-solid w-250px"
+                    data-control="select2" data-placeholder="--- Site ---"
+                    id="site_id_select" data-allow-clear="true">
+                <option></option>
+                 {% for r in sites %}
+                        <option value="{{ r.pk }}" {% if site_selected == r.pk %}selected{% endif %}>{{ r.nom }}</option>
+                    {% endfor %}
+            </select>
+        </div>
+
+        <!-- Month Selection -->
+        <div class="d-flex align-items-center ms-4">
+            <select name="month" style="width:100%" class="form-select form-select-sm form-select-solid w-150px"
+                    id="month_select" data-placeholder="--- Mois ---">
+                <option></option>
+                {% for month in months %}
+                    <option value="{{ month.value }}" {% if selected_month == month.value %}selected{% endif %}>{{ month.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Filter Button -->
+        <div class="d-flex align-items-center ms-4">
+            <button type="submit" class="btn btn-block btn-sm btn-primary">
+                <span class="menu-icon"></span> Filtrer
+            </button>
+        </div>
+    </div>
+</form>{% endif %}
+
+
+</div>
+
+
+
+
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+
+{% block javascript %}
+
+
+{% endblock javascript%}

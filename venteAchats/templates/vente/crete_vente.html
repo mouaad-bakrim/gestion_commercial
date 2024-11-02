@@ -1,0 +1,232 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% block title %}Nouvelle commande | {% endblock %}
+
+{% block css %}
+{% endblock css %}
+
+{% block toolbar %}
+<div id="kt_app_toolbar" class="app-toolbar" style="height: 50px">
+    <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">
+                Saisie Vente
+            </h1>
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li class="breadcrumb-item text-muted">
+                    <a href="" class="text-muted text-hover-primary">Accueil</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Saisie Vente</li>
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="">
+        <div class="card mt-4 mb-2">
+            <div class="card-header">
+                <div class="card-title">
+                    <h3 class="fw-bolder m-0">Saisie Vente</h3>
+                </div>
+            </div>
+            <div class="separator separator-dashed border-primary my-2 mb-3"></div>
+            <div class="card card-flush py-2 ">
+                <form action="" method="post" id="kt_order_form" autocomplete="off">
+                    {% csrf_token %}
+                    <div class="card-body">
+
+                        <!-- Section 1: Informations sur le Client et Technicien -->
+                        <h5 class="fw-bolder mb-3">Informations Client</h5>
+
+                        <div class="row mb-6">
+                            <div class="col-md-6">
+                                <label for="{{ form.client.id_for_label }}" class="form-label">
+                                    <span class="required">Client :</span>
+                                </label>
+                                <select id="{{ form.client.id_for_label }}" class="form-select form-select-solid" name="client" required>
+                                    <option value="" disabled selected>Choisissez un Client</option>
+                                    {% for choice in form.client.field.queryset %}
+                                    <option value="{{ choice.pk }}">{{ choice }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="{{ form.date_of_change.id_for_label }}" class="form-label">
+                                    <span class="required">Date :</span>
+                                </label>
+                                <input type="date" id="{{ form.date_of_change.id_for_label }}" class="form-control form-control-solid" name="date_of_change" value="{{ form.date_of_change.value|date:'Y-m-d' }}" required>
+                            </div>
+                        </div>
+
+                        <!-- Section 3: Détails des Articles -->
+                        <div class="separator separator-dashed border-primary my-2 mb-3"></div>
+                        <h5 class="fw-bolder mb-3">Détails des Articles</h5>
+
+                        <div class="table-responsive">
+                            <table class="table g-4 gs-0 mb-0 fw-bolder text-gray-700">
+                                <thead>
+                                    <tr class="border-bottom fs-7 fw-bolder text-gray-700 text-uppercase">
+                                        <th class="required min-w-150px w-105px">Article</th>
+                                        <th class="required min-w-150px w-100px">Prix</th>
+                                        <th class="required min-w-150px w-100px">Quantité</th>
+                                        <th class="required min-w-150px w-100px">Montant</th>
+                                        <th class="min-w-50px w-100px text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ligne-table-body">
+                                    <tr class="border-bottom border-bottom-dashed commande-ligne-form" data-kt-element="item">
+                                        <td>
+                                            <select class="form-select form-select-solid" name="articles[]" onchange="updatePrix(this)" required>
+                                                <option value="" disabled selected>Veuillez sélectionner un article</option>
+                                                {% for article in articles %}
+                                                <option value="{{ article.id }}" data-price="{{ article.prix }}">{{ article.nom }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-solid" name="prix[]" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-solid" name="quantite[]" oninput="updateQuantity(this)" required>
+                                        </td>
+                                        <td>
+                                            <input type="number" class="form-control form-control-solid" name="montant[]" readonly>
+                                        </td>
+                                        <td class="text-end">
+                                            <button type="button" class="btn btn-light btn-icon btn-sm me-2" onclick="addRow('article')">
+                                                <i class="fas fa-plus"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-light btn-icon btn-sm" onclick="removeRow(this)">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Section 4: Méthode de paiement -->
+                        <div class="separator separator-dashed border-primary my-2 mb-3"></div>
+                        <div class="table-responsive">
+                            <table class="table g-4 gs-0 mb-0 fw-bolder text-gray-700">
+                                <thead>
+                                    <tr class="border-bottom fs-7 fw-bolder text-gray-700 text-uppercase">
+                                        <th class="min-w-50px w-150px text-end">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td class="text-end">
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-check"></i> Ajouter une commande
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-10">
+    {% include 'base/includes/list_filter.html' %}
+</div>
+
+{% include 'base/includes/list_table.html' %}
+{% endblock content %}
+
+{% block javascript %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    let discountPercentage = 0; // Initialize this variable if needed
+
+    window.updatePrix = function(selectElement) {
+        const selectedOption = selectElement.options[selectElement.selectedIndex];
+        const priceInput = selectElement.closest('tr').querySelector('input[name="prix[]"]');
+
+        if (selectedOption) {
+            priceInput.value = selectedOption.dataset.price; // Récupération du prix depuis data-price
+        } else {
+            priceInput.value = ''; // Si aucune option n'est sélectionnée
+        }
+
+        calculateMontant(selectElement.closest('tr')); // Calculer le montant immédiatement
+    };
+
+    function calculateMontant(row) {
+        const price = parseFloat(row.querySelector('input[name="prix[]"]').value) || 0;
+        const quantity = parseFloat(row.querySelector('input[name="quantite[]"]').value) || 0;
+
+        // Calcul du montant total avant remise
+        const totalBeforeDiscount = price * quantity;
+
+        // Calcul du montant après remise
+        const totalAfterDiscount = totalBeforeDiscount - (totalBeforeDiscount * (discountPercentage / 100));
+
+        // S'assurer que le montant ne soit pas négatif
+        const montantInput = row.querySelector('input[name="montant[]"]');
+        montantInput.value = totalAfterDiscount < 0 ? 0 : totalAfterDiscount.toFixed(2);
+    }
+
+    window.updateQuantity = function(inputElement) {
+        calculateMontant(inputElement.closest('tr'));
+    };
+
+    window.addRow = function(type) {
+        const newRow = document.createElement('tr');
+        newRow.classList.add('border-bottom', 'border-bottom-dashed', 'commande-ligne-form');
+
+        if (type === 'article') {
+            newRow.innerHTML = `
+                <td>
+                    <select class="form-select form-select-solid" name="articles[]" onchange="updatePrix(this)" required>
+                        <option value="" disabled selected>Veuillez sélectionner un article</option>
+                        {% for article in articles %}
+                        <option value="{{ article.id }}" data-price="{{ article.prix }}">{{ article.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-solid" name="prix[]" readonly>
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-solid" name="quantite[]" oninput="updateQuantity(this)" required>
+                </td>
+                <td>
+                    <input type="number" class="form-control form-control-solid" name="montant[]" readonly>
+                </td>
+                <td class="text-end">
+                    <button type="button" class="btn btn-light btn-icon btn-sm me-2" onclick="addRow('article')">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-light btn-icon btn-sm" onclick="removeRow(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            `;
+            document.getElementById('ligne-table-body').appendChild(newRow);
+        }
+    };
+
+    window.removeRow = function(button) {
+        const row = button.closest('tr');
+        if (row) {
+            row.remove();
+        }
+    };
+});
+</script>
+{% endblock javascript %}

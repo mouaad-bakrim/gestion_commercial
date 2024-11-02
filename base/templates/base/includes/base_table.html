@@ -1,0 +1,75 @@
+{% extends "django_tables2/table.html" %}
+{% load django_tables2 %}
+{% load querystring from django_tables2 %}
+
+{% block table.thead %}
+    {% if table.show_header %}
+        <thead {{ table.attrs.thead.as_html }}>
+        <tr>
+            {% for column in table.columns %}
+                {% if column.orderable %}
+                    <th {{ column.attrs.th.as_html }}
+                            hx-get="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}"
+                            hx-target="#list_table_id"
+                            hx-swap="outerHTML"
+                            hx-indicator=".table_progress"
+                            {% comment %} style hoverable {% endcomment %}
+                            style="cursor: pointer;hoverable;">
+
+                        <span class="text-gray-800">{{ column.header }}</span>
+                    </th>
+                {% else %}
+                    <th {{ column.attrs.th.as_html }}>
+                        <span class="text-gray-700">{{ column.header }}</span>
+                    </th>
+                {% endif %}
+            {% endfor %}
+        </tr>
+        </thead>
+    {% endif %}
+{% endblock table.thead %}
+
+{% block pagination.range %}
+    {% for p in table.page|table_page_range:table.paginator %}
+        <li class="page-item {% if table.page.number == p %} active{% endif %}">
+            <div class="page-link px-0"
+                 {% if p != '...' %}hx-get="{% querystring table.prefixed_page_field=p %}"{% endif %}
+                 hx-trigger="click"
+                 hx-target="#list_table_id"
+                 hx-swap="outerHTML"
+                 hx-indicator=".table_progress">
+                 <a href="#" class="page-link"> {{ p }} </a>
+
+            </div>
+        </li>
+    {% endfor %}
+{% endblock pagination.range %}
+
+{% block pagination.previous %}
+    <li class="previous page-item">
+        <div hx-get="{% querystring table.prefixed_page_field=table.page.previous_page_number %}"
+             hx-trigger="click"
+             hx-target="#list_table_id"
+             hx-swap="outerHTML"
+             hx-indicator=".table_progress"
+             class="page-link">
+             <a href="#" class="page-link"><i class="previous"></i> </a>
+            {% comment %} {% trans 'previous' %} {% endcomment %}
+        </div>
+    </li>
+{% endblock pagination.previous %}
+{% block pagination.next %}
+    <li class="next page-item">
+        <div hx-get="{% querystring table.prefixed_page_field=table.page.next_page_number %}"
+             hx-trigger="click"
+             hx-target="#list_table_id"
+             hx-swap="outerHTML"
+             hx-indicator=".table_progress"
+             class="page-link">
+             <a href="#" class="page-link"><i class="next"></i> </a>
+        </div>
+    </li>
+{% endblock pagination.next %}
+
+
+{% render_table table %}

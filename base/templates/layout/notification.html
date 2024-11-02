@@ -1,0 +1,18 @@
+
+{% for message in notifications %}
+dedede
+                <div class="d-flex justify-content-start mb-10">
+                    <!--begin::Wrapper-->
+                    <div class="d-flex flex-column align-items-start">
+                        <div class="p-5 rounded bg-light-info text-gray-900 fw-semibold mw-lg-400px text-start"
+                             data-kt-element="message-text">{{ message.content }}
+                        </div>
+                        <!--end::Text-->
+                    </div>
+                    <!--end::Wrapper-->
+                </div>
+
+                {% empty %}
+                <p>Aucun message disponible pour le moment.</p>
+                {% endfor %}
+                <!--end::Message(in)-->

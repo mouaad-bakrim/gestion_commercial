@@ -1,0 +1,45 @@
+<div id="kt_app_footer" class="app-footer bg-light text-dark">
+    <!--begin::Footer container-->
+    <div class="app-container container-fluid d-flex flex-column flex-md-row justify-content-between py-4">
+        <!--begin::Logo-->
+           <div class="order-1 order-md-1 mb-3 mb-md-0">
+    {% if user_sites %}
+        <a href="#" class="text-dark fw-bold fs-5">
+   {% if user_sites|length == 1 %}
+                {{ user_sites.0.nom }}
+            {% else %}
+                Administration
+            {% endif %}
+        </a>
+
+    {% else %}
+        <a href="#" class="text-dark fw-bold fs-5">Administration</a>
+
+    {% endif %}
+    <span class="menu-arrow d-lg-none"></span>
+</div>
+        <!--end::Logo-->
+
+        <!--begin::Menu-->
+        <ul class="menu menu-dark fw-semibold order-2 d-flex">
+            <li class="menu-item">
+                <a href="" target="_blank" class="menu-link px-3">Nous contacter</a>
+            </li>
+            <li class="menu-item">
+                <a href="" target="_blank" class="menu-link px-3">Support</a>
+            </li>
+            <li class="menu-item">
+                <a href="" target="_blank" class="menu-link px-3">Achat</a>
+            </li>
+        </ul>
+        <!--end::Menu-->
+
+        <!--begin::Copyright-->
+        <div class="text-gray-600 order-3">
+            <span class="text-muted fw-semibold me-1">{% now "Y" %}&copy;</span>
+            <a href="" target="_blank" class="text-dark text-hover-primary">Tous droits réservés</a>
+        </div>
+        <!--end::Copyright-->
+    </div>
+    <!--end::Footer container-->
+</div>

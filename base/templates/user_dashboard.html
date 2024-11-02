@@ -1,0 +1,534 @@
+{% extends "base/base.html" %}
+
+{% load static %}
+{% block title %}Bienvenue sur {% endblock %}
+
+
+{% block css %}
+ <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css">
+    <style>
+        .card-flush {
+            border: none;
+        }
+        .card-header {
+            border-bottom: 1px solid #eaeaea;
+        }
+        .table-light th {
+            background-color: #f8f9fa;
+        }
+        .fs-7 {
+            font-size: 0.875rem;
+        }
+        .fs-6 {
+            font-size: 1rem;
+        }
+        .fs-3x {
+            font-size: 1.875rem;
+        }
+        .badge-light-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .badge-light-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .badge-light-info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border: none;
+        }
+        .card {
+    border-radius: 0.5rem; /* Bordures plus arrondies */
+    border: 1px solid rgba(0, 0, 0, 0.1); /* Bordure légère */
+}
+
+    </style>
+
+{% endblock css %}
+
+{% block toolbar %}
+
+
+
+<div id="kt_app_toolbar" class="app-toolbar mt-1" style="height: 50px;">
+    <!--begin::Toolbar container-->
+  <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+    <!--begin::Page title-->
+    <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+        <!--begin::Title-->
+<h1 class="page-heading d-flex text-gray-700 fw-bold fs-5 flex-column justify-content-center my-0">
+    {% if user_sites.count == 1 %}
+        Tableau de bord: {{ user_sites.first.nom }}
+    {% else %}
+        Tableau de bord: Administrateur
+    {% endif %}
+</h1>        <!--end::Title-->
+        <!--begin::Date-->
+        <h2 class="text-gray-600 fw-normal fs-6 my-0">Date: {{ date_yesterday|date:"d-m-Y" }}</h2>
+        <!--end::Date-->
+        <!--begin::Breadcrumb-->
+    </div>
+    <!--end::Page title-->
+</div>
+
+
+
+
+
+</div>
+
+
+
+
+{% endblock %}
+
+{% block content %}
+
+
+
+
+
+<!--begin::Main-->
+					<div class="app-main flex-column flex-row-fluid" id="kt_app_main">
+						<!--begin::Content wrapper-->
+						<div class="d-flex flex-column flex-column-fluid">
+
+							<!--begin::Content-->
+							<div id="kt_app_content" class="app-content flex-column-fluid mt-5">
+								<!--begin::Content container-->
+								<div id="kt_app_content_container" class="app-container container-fluid">
+									<!--begin::Row-->
+
+
+
+                              <div class="row g-5 gx-xl-10">
+
+    {% for data in site_data %}
+        <div class="col-md-12 col-lg-6 col-xl-3 col-xxl-3">
+            <div class="card rounded shadow-sm" style="background-color: {{ data.bg_color }}; height: 150px;">
+                <h5 class="card-title text-center mt-4">{{ data.site.nom }}</h5>
+                <div class="card-body d-flex flex-column align-items-center justify-content-between h-100">
+                    <span class="fw-bold text-primary">{{ data.progression.total_progression | floatformat:2 }}%</span>
+                    <div class="w-100 h-100">
+                        <div class="d-flex justify-content-between fw-bold text-dark">
+                            <span>Total Ventes</span>
+                            <span>{{ data.progression.total_progression | floatformat:2 }}%</span>
+                        </div>
+                        <div class="progress">
+                            <div class="progress-bar bg-primary" role="progressbar" style="width: {{ data.progression.lubrifiant | floatformat:2 }}%;" aria-valuenow="{{ data.progression.lubrifiant | floatformat:2 }}" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+
+
+
+
+
+
+
+
+    <!--begin::Col Card Détails-->
+                   <div class="col-md-12 col-lg-6 col-xl-9 col-xxl-9">
+    <div class="h-md-50 mb-5 mb-xl-10">
+        <div class="row gy-5 mb-3 gx-xl-10">
+            {% for data in site_data %}
+                {% with data.attributes as attrs %}
+                    <!--begin::Col Carburant-->
+                    {% if attrs.display_carburant %}
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="card rounded shadow-sm border-0 text-center" style="background-color: #FFCCBC; height: 150px;">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                    <i class="fas fa-gas-pump fs-2hx text-danger" aria-label="Carburant"></i>
+                                    <h6 class="fw-bold text-dark" style="font-size: 1.25rem;">{{ total_carburant_montant | floatformat:2 }}</h6>
+                                    <p class="text-muted" style="font-size: 0.8rem;">Total Carburant</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!--end::Col-->
+
+                    <!--begin::Col Lubrifiant-->
+                    {% if attrs.display_lubrifiant %}
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="card rounded shadow-sm border-0 text-center" style="background-color: #FFE082; height: 150px;">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                    <i class="fas fa-oil-can fs-2hx text-warning" aria-label="Lubrifiant"></i>
+                                    <h6 class="fw-bold text-dark" style="font-size: 1.25rem;">{{ lubrifiant_total | floatformat:2 }}</h6>
+                                    <p class="text-muted" style="font-size: 0.8rem;">Total Lubrifiant</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!--end::Col-->
+
+                    <!--begin::Col Lavage-->
+                    {% if attrs.display_lavage %}
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="card rounded shadow-sm border-0 text-center" style="background-color: #BBDEFB; height: 150px;">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                    <i class="fas fa-shower fs-2hx text-info" aria-label="Lavage"></i>
+                                    <h6 class="fw-bold text-dark" style="font-size: 1.25rem;">{{ total_lavage | floatformat:2 }}</h6>
+                                    <p class="text-muted" style="font-size: 0.8rem;">Total Lavage</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!--end::Col-->
+
+                    <!--begin::Col Pesage-->
+                    {% if attrs.display_pesage %}
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="card rounded shadow-sm border-0 text-center" style="background-color: #C8E6C9; height: 150px;">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                    <i class="fas fa-balance-scale fs-2hx text-success" aria-label="Pesage"></i>
+                                    <h6 class="fw-bold text-dark" style="font-size: 1.25rem;">{{ total_pesage | floatformat:2 }}</h6>
+                                    <p class="text-muted" style="font-size: 0.8rem;">Pesage</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!--end::Col-->
+
+                    <!--begin::Col Achat Carburant-->
+                    {% if attrs.display_carburant %}
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="card rounded shadow-sm border-0 text-center" style="background-color: #FFAB91; height: 150px;">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                    <i class="fas fa-wallet fs-2hx text-danger" aria-label="Achat Carburant"></i>
+                                    <h6 class="fw-bold text-dark" style="font-size: 1.25rem;">{{ total_achate_carburant | floatformat:2 }}</h6>
+                                    <p class="text-muted" style="font-size: 0.8rem;">Achat Carburant</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!--end::Col-->
+
+                    <!--begin::Col Achat Lubrifiant-->
+                    {% if attrs.display_lubrifiant %}
+                        <div class="col-sm-6 col-xl-2">
+                            <div class="card rounded shadow-sm border-0 text-center" style="background-color: #E1BEE7; height: 150px;">
+                                <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                    <i class="fas fa-piggy-bank fs-2hx text-secondary" aria-label="Achat Lubrifiant"></i>
+                                    <h6 class="fw-bold text-dark" style="font-size: 1.25rem;">{{ total_achate_lubrifiant | floatformat:2 }}</h6>
+                                    <p class="text-muted" style="font-size: 0.8rem;">Achat Lubrifiant</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <!--end::Col-->
+                {% endwith %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+    <!--end::Col-->
+</div>
+
+
+
+<div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+    <div class="col-xl-12">
+        <!--begin::Table widget-->
+        <div class="card card-flush h-md-100">
+            <div class="card-header">
+                <h3 class="card-title text-dark">Vente Mensuelle: {{ months_years }}</h3>
+            </div>
+            <div class="card-body pt-6">
+                <!--begin::Table container-->
+                <div class="table-responsive">
+                    <!--begin::Table-->
+                    <table class="table table-striped table-bordered align-middle gs-0 gy-3 my-0">
+                        <thead class="bg-light">
+                            <tr class="fs-8 fw-bold text-gray-800 border-bottom">
+                                <th class="text-start">Catégorie</th>
+                                <th class="text-start">Objectif</th>
+                                <th class="text-start">Évolution</th>
+                                <th class="text-start">Ventes Année Précédente</th>
+                                {% for day in days %}
+                                <th class="text-end">{{ day }}</th>
+                                {% endfor %}
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+                            <td class="text-start fs-6 fw-bold">Gasoil</td>
+                            <td class="text-start fs-6 fw-bold">{{ total_objectifs_carburant|floatformat:2 }}</td>
+                            <td class="text-start fs-6 fw-bold">
+
+                                   {{ avancement_carburant|floatformat:2 }}%
+
+                            </td>
+                            <td class="text-start fs-6 fw-bold">
+
+                                 {{ consommation_prev_year|floatformat:2 }}
+
+                            </td>
+                            {% for date, data in consommation.items %}
+                                <td class="text-end" style="font-size:12px; color: {% if data.gasoil > 0 %} black {% else %} red {% endif %};">
+                                     {% if data.gasoil == 0 %}
+                                        0
+                                    {% else %}
+                                        {{ data.gasoil|floatformat:2 }}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+
+
+                            <!-- Super -->
+                           <tr>
+                            <td class="text-start fs-6 fw-bold">Super</td>
+                            <td class="text-start fs-6 fw-bold">{{ total_objectifs_carburant|floatformat:2 }}</td>
+                            <td class="text-start fs-6 fw-bold">  {{ avancement_carburant|floatformat:2 }}%</td>
+                            <td class="text-start fs-6 fw-bold">  {{ avancement_carburant|floatformat:2 }}%</td>
+                            {% for date, data in consommation.items %}
+                                <td class="text-end" style="font-size:12px; color: {% if data.super > 0 %} black {% else %} red {% endif %};">
+                                    {% if data.super == 0 %}
+                                        0
+                                    {% else %}
+                                        {{ data.super|floatformat:2 }}
+                                    {% endif %}
+                                </td>
+                            {% endfor %}
+                        </tr>
+
+                            <!-- Excelium -->
+                            <tr>
+                                <td class="text-start fs-6 fw-bold">Excelium</td>
+                                <td class="text-start fs-6 fw-bold">{{ total_objectifs_carburant|floatformat:2 }}</td>
+                                <td class="text-start fs-6 fw-bold">{{ avancement_carburant|floatformat:2 }}%</td>
+                                <td class="text-start fs-6 fw-bold">{{ avancement_carburant|floatformat:2 }}%</td>
+                                {% for date, data in consommation.items %}
+                                <td class="text-end" style="font-size:12px; color: {% if data.excelium > 0 %} black {% else %} red {% endif %};">
+
+                                     {% if data.excelium == 0 %}
+        0
+    {% else %}
+        {{ data.excelium|floatformat:2 }}
+    {% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            <!-- Lubrifiant -->
+                            <tr>
+                                <td class="text-start fs-6 fw-bold">Lubrifiant</td>
+                                <td class="text-start fs-6 fw-bold">{{ total_objectifs_lavage|floatformat:2 }}</td>
+                                <td class="text-start fs-6 fw-bold">{{ avancement_lubrifiant|floatformat:2 }}%</td>
+                                <td class="text-start fs-6 fw-bold">{{ avancement_lubrifiant|floatformat:2 }}%</td>
+                                {% for date, data in consommation.items %}
+                                <td class="text-end" style="font-size:12px; color: {% if data.lubrifiant > 0 %} black {% else %} red {% endif %};">
+
+                                    {% if data.lubrifiant == 0 %}
+        0
+    {% else %}
+        {{ data.lubrifiant|floatformat:2 }}
+    {% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            <!-- Lavage -->
+                            <tr>
+                                <td class="text-start fs-6 fw-bold">Lavage</td>
+                              <td class="text-start fs-6 fw-bold">{{ total_objectifs_lavage|floatformat:2 }}</td>
+                                <td class="text-start fs-6 fw-bold">{{ avancement_lavage|floatformat:2 }}%</td>
+                                <td class="text-start fs-6 fw-bold">{{ avancement_lavage|floatformat:2 }}%</td>
+                                {% for date, data in consommation.items %}
+                                <td class="text-end" style="font-size:12px; color: {% if data.lavage > 0 %} black {% else %} red {% endif %};">
+
+                                    {% if data.lavage == 0 %}
+        0
+    {% else %}
+        {{ data.lavage|floatformat:2 }}
+    {% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                            <!-- Pesage -->
+                            <tr>
+                                <td class="text-start fs-6 fw-bold">Pesage</td>
+                               <td class="text-start fs-6 fw-bold">{{ total_objectifs_pesage|floatformat:2 }}</td>
+                                <td class="text-start fs-6 fw-bold">{{ avancement_pesage|floatformat:2 }}%</td>
+                                <td class="text-start fs-6 fw-bold">{{ avancement_pesage|floatformat:2 }}%</td>
+                                {% for date, data in consommation.items %}
+                                <td class="text-end" style="font-size:12px; color: {% if data.pesage > 0 %} black {% else %} red {% endif %};">
+
+                                    {% if data.pesage == 0 %}
+        0
+    {% else %}
+        {{ data.pesage|floatformat:2 }}
+    {% endif %}
+                                </td>
+                                {% endfor %}
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!--end::Table-->
+                </div>
+                <!--end::Table container-->
+            </div>
+        </div>
+        <!--end::Table widget-->
+    </div>
+    <!--end::Col-->
+</div>
+<!--end::Row-->
+                              <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+    <div class="col-xl-12">
+        <!--begin::Table widget-->
+        <div class="card card-flush h-md-100">
+            <div class="card-header">
+                <h3 class="card-title text-dark">Soldes des Clients: {{ user_sites.first.nom }}</h3>
+            </div>
+            <div class="card-body pt-6">
+                <!--begin::Table container-->
+                <div class="table-responsive">
+                    <!--begin::Table-->
+                    <table class="table table-striped table-bordered align-middle gs-0 gy-3 my-0">
+                        <thead class="bg-light">
+                            <tr class="fs-8 fw-bold text-gray-800 border-bottom">
+                                <th class="text-start">Client</th>
+                                <th class="text-start">Solde</th>
+                                <th class="text-start">Statut de Paiement</th>
+                                <th class="text-start">Nombre de Factures</th>
+                                <th class="text-start">Montant des Factures Payées</th>
+                                <th class="text-start">Montant des Factures Non Payées</th>
+                                <th class="text-start">Dernière Facture Émise</th>
+                                <th class="text-start">Total des Ventes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for client in clients %}
+                            <tr>
+                                <td class="text-start fs-6 fw-bold">{{ client.nom }}</td>
+                                <td class="text-start fs-6 fw-bold">{{ client.solde|floatformat:2 }} T.T.C.</td>
+                                <td class="text-start fs-6 fw-bold {% if client.solde < 0 %}text-danger{% endif %}">
+                                    {% if client.solde < 0 %}
+                                        N'est pas payé
+                                    {% else %}
+                                        À jour
+                                    {% endif %}
+                                </td>
+                                <td class="text-start fs-6 fw-bold">{{ client.factures.count }}</td>
+                                <td class="text-start fs-6 fw-bold"> T.T.C.</td>
+                                <td class="text-start fs-6 fw-bold"> T.T.C.</td>
+                                <td class="text-start fs-6 fw-bold"></td>
+                                <td class="text-start fs-6 fw-bold"> T.T.C.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    <!--end::Table-->
+                </div>
+                <!--end::Table container-->
+            </div>
+        </div>
+        <!--end::Table widget-->
+    </div>
+    <!--end::Col-->
+</div>
+
+<!--end::Row-->
+
+
+
+<div class="col-xl-8">
+
+										</div>
+										<!--end::Col-->
+									</div>
+									<!--end::Row-->
+								</div>
+								<!--end::Content container-->
+
+
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+{% endblock content %}
+
+
+{% block javascript %}
+
+<script>
+	document.querySelector('#category_{{ productCategory.id }}').indeterminate = true;
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+ document.addEventListener("DOMContentLoaded", function() {
+    const consommationData = JSON.parse('{{ consommation_json|escapejs }}');  // Intégrer les données JSON
+    const days = Object.keys(consommationData);
+    console.log(days);  // Afficher les jours pour vérifier leur présence
+    const data = {
+        days: days,
+        categories: {
+            gasoil: days.map(day => consommationData[day].gasoil),
+            super: days.map(day => consommationData[day].super),
+            lubrifiant: days.map(day => consommationData[day].lubrifiant),
+            lavage: days.map(day => consommationData[day].lavage)
+        }
+    };
+
+    let currentPage = 1;
+    const rowsPerPage = 15;
+    const totalPages = Math.ceil(data.days.length / rowsPerPage);
+
+    function renderTable(page) {
+        const tableBody = document.querySelector("#consumption-table tbody");
+        const daysToShow = data.days.slice((page - 1) * rowsPerPage, page * rowsPerPage);
+
+        const rows = [];
+        for (const category in data.categories) {
+            const values = data.categories[category].slice((page - 1) * rowsPerPage, page * rowsPerPage);
+            rows.push(`<tr>
+                <td class="text-start fs-6 fw-bold">${category.charAt(0).toUpperCase() + category.slice(1)}</td>
+                ${daysToShow.map((day, index) => `<td class="text-end">${values[index]}</td>`).join('')}
+            </tr>`);
+        }
+        tableBody.innerHTML = rows.join('');
+    }
+
+
+
+    document.getElementById('btn-toggle').addEventListener('click', function() {
+        if (currentPage === totalPages) {
+            currentPage = 1;
+            this.textContent = 'Afficher Prochains 15 Jours';
+        } else {
+            currentPage++;
+            this.textContent = currentPage === totalPages ? 'Afficher Prochains 15 Jours' : 'Afficher Précédents 15 Jours';
+        }
+        renderTable(currentPage);
+    });
+
+    renderTable(currentPage);
+    renderChart();
+});
+
+
+</script>
+<script>
+    const consommationJson = '{{ consommation_json|escapejs }}';
+    console.log(consommationJson);  // Pour vérifier les données JSON
+</script>
+
+{% endblock javascript%}

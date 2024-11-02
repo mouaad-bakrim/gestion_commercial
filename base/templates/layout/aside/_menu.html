@@ -1,0 +1,271 @@
+{% load static %}
+<style>
+    #kt_app_sidebar_toggle:hover {
+    box-shadow: 0px 0px 20px rgba(16, 185, 129, 0.6);
+}
+#kt_app_sidebar_toggle:hover i {
+    color: #34D399;
+}
+
+</style>
+<div id="kt_app_sidebar" class="app-sidebar flex-column" data-kt-drawer="true"
+     data-kt-drawer-name="app-sidebar" data-kt-drawer-activate="{default: true, lg: false}"
+     data-kt-drawer-overlay="true" data-kt-drawer-width="250px" data-kt-drawer-direction="start"
+     data-kt-drawer-toggle="#kt_app_sidebar_mobile_toggle" style="background-color: #003545;">
+    <!--begin::Logo-->
+    <div class="app-sidebar-logo px-6 py-3" id="kt_app_sidebar_logo" style="text-align: center;">
+
+        <a href="" class="{% if not request.user.is_superuser %}d-none{% endif %}">
+            <img alt="Logo" src=""
+                 class="h-65px w-200px app-sidebar-logo-default"/>
+            <img alt="Logo" src=""
+                 class="h-25px app-sidebar-logo-minimize"/>
+        </a>
+
+
+        <div id="kt_app_sidebar_toggle"
+     class="app-sidebar-toggle btn btn-icon btn-sm h-40px w-40px position-absolute top-50 start-100 translate-middle"
+     data-kt-toggle="true" data-kt-toggle-state="active" data-kt-toggle-target="body"
+     data-kt-toggle-name="app-sidebar-minimize"
+     style="border-radius: 10px; background-color: #1F2937; box-shadow: 0 0 10px rgba(255, 255, 255, 0.2); transition: all 0.3s ease;">
+    <i class="ki-duotone ki-arrow-left fs-3"
+       style="color: #10B981; transition: color 0.3s ease;">
+        <span class="path1"></span>
+        <span class="path2"></span>
+    </i>
+</div>
+
+
+
+        <!--end::Sidebar toggle-->
+    </div>
+    <!--end::Logo-->
+    <!--begin::sidebar menu-->
+    <div class="app-sidebar-menu overflow-hidden flex-column-fluid">
+        <!--begin::Menu wrapper-->
+        <div id="kt_app_sidebar_menu_wrapper" class="app-sidebar-wrapper">
+            <!--begin::Scroll wrapper-->
+            <div id="kt_app_sidebar_menu_scroll" class="scroll-y my-5 mx-3" data-kt-scroll="true"
+                 data-kt-scroll-activate="true" data-kt-scroll-height="auto"
+                 data-kt-scroll-dependencies="#kt_app_sidebar_logo, #kt_app_sidebar_footer"
+                 data-kt-scroll-wrappers="#kt_app_sidebar_menu" data-kt-scroll-offset="5px"
+                 data-kt-scroll-save-state="true">
+                <!--begin::Menu-->
+                <div class="menu menu-column menu-rounded menu-sub-indention fw-semibold fs-6"
+                     id="#kt_app_sidebar_menu" data-kt-menu="true" data-kt-menu-expand="false">
+                    <!--begin:Menu item-->
+                    <div data-kt-menu-trigger="click" class="menu-item here show menu-accordion">
+                        <!--begin:Menu link-->
+                        {% if request.user.is_superuser %}
+                        <a href="">
+
+                            {% else %}
+                            <a href="">
+
+                                {% endif %}
+
+                                <span class="menu-link">
+												<span class="menu-icon">
+													<i class="ki-duotone ki-element-11 fs-2">
+														<span class="path1"></span>
+														<span class="path2"></span>
+														<span class="path3"></span>
+														<span class="path4"></span>
+													</i>
+												</span>
+												<span class="menu-title">Dashboards</span>
+
+											</span>
+                            </a>
+                        </a>
+                    </div>
+                    <div class="menu-item pt-5">
+                        <!--begin:Menu content-->
+                        <div class="menu-content">
+                            <span class="menu-heading fw-bold text-uppercase fs-7">Clients</span>
+                        </div>
+                        <!--end:Menu content-->
+                    </div>
+                    <div data-kt-menu-trigger="click"
+                         class="menu-item menu-accordion  {% if active_menu == 'clients' %}here show{% endif %} ">
+                        <!--begin:Menu link-->
+                        <span class="menu-link">
+										<span class="menu-icon">
+											<i class="bi bi-people fs-2">
+											</i>
+										</span>
+										<span class="menu-title">Gestion Clients</span>
+										<span class="menu-arrow"></span>
+									</span>
+                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+
+                                <a class="menu-link {% if active_item == 'client_list'  and active_menu == 'clients'  %}active{% endif %}"
+                                    href="{% url 'client:list_client' %}">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                    <span class="menu-title">Clients suivis</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+
+                        </div>
+                        <!--end:Menu sub-->
+                    </div>
+  <div class="menu-item pt-5">
+                        <!--begin:Menu content-->
+                        <div class="menu-content">
+                            <span class="menu-heading fw-bold text-uppercase fs-7">Vente</span>
+                        </div>
+                        <!--end:Menu content-->
+                    </div>
+                    <div data-kt-menu-trigger="click"
+                         class="menu-item menu-accordion  {% if active_menu == 'ventes' %}here show{% endif %} ">
+                        <!--begin:Menu link-->
+                        <span class="menu-link">
+										<span class="menu-icon">
+											<i class="bi bi-people fs-2">
+											</i>
+										</span>
+										<span class="menu-title">Saisie des Vente</span>
+										<span class="menu-arrow"></span>
+									</span>
+                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+
+                                <a class="menu-link {% if active_item == 'vente_create'  and active_menu == 'ventes'  %}active{% endif %}"
+                                   href="{% url 'venteAchats:Size_vente' %}">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                    <span class="menu-title">Vente Vendeur</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                               <div class="menu-item">
+                                <!--begin:Menu link-->
+
+                                <a class="menu-link {% if active_item == 'vente_create'  and active_menu == 'ventes'  %}active{% endif %}"
+                                   href="{% url 'venteAchats:Size_vente' %}">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                    <span class="menu-title">Vente Client</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+
+                        </div>
+                        <!--end:Menu sub-->
+                    </div>
+                      <div data-kt-menu-trigger="click"
+                         class="menu-item menu-accordion  {% if active_menu == 'ventes' %}here show{% endif %} ">
+                        <!--begin:Menu link-->
+                        <span class="menu-link">
+										<span class="menu-icon">
+											<i class="bi bi-people fs-2">
+											</i>
+										</span>
+										<span class="menu-title">Liste des Vente</span>
+										<span class="menu-arrow"></span>
+									</span>
+                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+
+                                <a class="menu-link {% if active_item == 'vente_create'  and active_menu == 'ventes'  %}active{% endif %}"
+                                   href="{% url 'venteAchats:Size_vente' %}">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                    <span class="menu-title">Liste Vente Vendeur</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                               <div class="menu-item">
+                                <!--begin:Menu link-->
+
+                                <a class="menu-link {% if active_item == 'vente_create'  and active_menu == 'ventes'  %}active{% endif %}"
+                                       href="{% url 'venteAchats:List_vente_client' %}">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                    <span class="menu-title">Liste Vente Client</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+
+                        </div>
+                        <!--end:Menu sub-->
+                    </div>
+  <div class="menu-item pt-5">
+                        <!--begin:Menu content-->
+                        <div class="menu-content">
+                            <span class="menu-heading fw-bold text-uppercase fs-7">Achate</span>
+                        </div>
+                        <!--end:Menu content-->
+                    </div>
+                    <div data-kt-menu-trigger="click"
+                         class="menu-item menu-accordion  {% if active_menu == 'clients' %}here show{% endif %} ">
+                        <!--begin:Menu link-->
+                        <span class="menu-link">
+										<span class="menu-icon">
+											<i class="bi bi-people fs-2">
+											</i>
+										</span>
+										<span class="menu-title">Gestion des Achate</span>
+										<span class="menu-arrow"></span>
+									</span>
+                        <!--end:Menu link-->
+                        <!--begin:Menu sub-->
+                        <div class="menu-sub menu-sub-accordion">
+
+                            <div class="menu-item">
+                                <!--begin:Menu link-->
+
+                                <a class="menu-link {% if active_item == 'client_list'  and active_menu == 'clients'  %}active{% endif %}"
+                                   href="">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                    <span class="menu-title">Saisie Achate</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+
+                        </div>
+                        <!--end:Menu sub-->
+                    </div>
+
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+<script>
+    $(document).ready(function () {
+    $('[data-kt-menu-trigger="click"]').on('click', function (e) {
+        e.stopPropagation(); // Empêche la propagation de l'événement
+        $(this).find('.menu-sub').toggle(); // Affiche ou masque le sous-menu
+    });
+});
+
+</script>

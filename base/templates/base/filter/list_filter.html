@@ -1,0 +1,17 @@
+{% load crispy_forms_tags %}
+
+
+
+<div id="kt_app" class="app-toolbar mt-2 ">
+    <div class="card-footer d-flex justify-content-start py-2 px-9 gap-5" id="filterCard">
+        <form action="" method="get" autocomplete="off" class="filter-form d-flex me-auto">
+            <div class="input-group" style="padding-right: 10px">
+             {% crispy filter.form %}
+            </div>
+            <a href="#" onclick="reset_filter();" class="btn btn-light me-3" style="height: 40px;">Réinitialiser</a>
+            <button type="submit" class="btn btn-primary" id="kt_careers_submit_button" style="height: 40px;">
+                Filtrer
+            </button>
+        </form>
+    </div>
+</div>

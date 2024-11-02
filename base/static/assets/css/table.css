@@ -1,0 +1,34 @@
+
+//.table td, .table th {
+//    padding: 0.5rem;
+//    vertical-align: top;
+//    border-top: 1px solid #dee2e6;
+//}
+//table.table thead th {
+//    font-weight: bold;
+//}
+.table-container th.asc{
+background-color: #e1e4e7;
+}
+
+.table-container th.desc{
+background-color: #e1e4e7;
+}
+
+.table-container th.orderable:hover {
+background-color: #e1e4e7;
+}
+.table-container th.orderable:hover {
+background-color: #e1e4e7;
+}
+
+.table-container th.asc:after {
+content: url("/static/assets/img/sort_up_small.svg");
+float: right;
+margin-left: 0.5em;
+}
+.table-container th.desc:after {
+content: url("/static/assets/img/sort_down_small.svg");
+float: right;
+margin-left: 0.5em;
+}

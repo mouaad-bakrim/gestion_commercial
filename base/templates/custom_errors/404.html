@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+	<!--begin::Head-->
+	<head><base href="../../">
+		<meta charset="utf-8" />
+		<title>Erreur HTTP404</title>
+		{% comment %} <meta name="description" content="Metronic admin dashboard live demo. Check out all the features of the admin panel. A large number of settings, additional services and widgets." />
+		<meta name="keywords" content="Metronic, bootstrap, bootstrap 5, Angular 11, VueJs, React, Laravel, admin themes, web design, figma, web development, ree admin themes, bootstrap admin, bootstrap dashboard" />
+		<link rel="canonical" href="Https://preview.keenthemes.com/metronic8" /> {% endcomment %}
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		{% comment %} <link rel="shortcut icon" href="assets/media/logos/favicon.ico" /> {% endcomment %}
+		<link rel="apple-touch-icon" sizes="180x180" href="{% static 'assets/media/favicon/apple-touch-icon.png'%}">
+		<link rel="icon" type="image/png" sizes="32x32" href="{% static 'assets/media/favicon/favicon-32x32.png'%}">
+		<link rel="icon" type="image/png" sizes="16x16" href="{% static 'assets/media/favicon/favicon-16x16.png'%}">
+		<link rel="manifest" href="{% static 'assets/media/favicon/site.webmanifest'%}">
+		<link rel="mask-icon" href="{% static 'assets/media/favicon/safari-pinned-tab.svg'%}" color="#5bbad5">
+		<link rel="shortcut icon" href="{% static 'assets/media/favicon/favicon.ico'%}">
+		<meta name="msapplication-TileColor" content="#1b1b4d">
+		<meta name="msapplication-config" content="{% static 'assets/media/favicon/browserconfig.xml'%}">
+		<!--begin::Fonts-->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+		<!--end::Fonts-->
+		<!--begin::Global Stylesheets Bundle(used by all pages)-->
+		<link href="{% static 'assets/plugins/global/plugins.bundle.css'%}" rel="stylesheet" type="text/css" />
+		<link href="{% static 'assets/css/style.bundle.css'%}" rel="stylesheet" type="text/css" />
+		<!--end::Global Stylesheets Bundle-->
+	</head>
+	<!--end::Head-->
+	<!--begin::Body-->
+	<body id="kt_body" class="bg-white">
+		<!--begin::Main-->
+		<div class="d-flex flex-column flex-root">
+			<!--begin::Authentication - Error 404 -->
+			<div class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed">
+				{% comment %} style="background-image: url(assets/media/illustrations/progress-hd.png)" {% endcomment %}
+				<!--begin::Content-->
+				<div class="d-flex flex-column flex-column-fluid text-center p-10 py-lg-20">
+					<!--begin::Logo-->
+					<a href="/" class="mb-10 pt-lg-20">
+						<img alt="Logo" src="{% static 'assets/media/logos/GroupeAccess-01.png' %}" class="h-50px mb-5" />
+					</a>
+					<!--end::Logo-->
+					<!--begin::Wrapper-->
+					<div class="pt-lg-10">
+						<!--begin::Logo-->
+						<h1 class="fw-bolder fs-4x text-gray-700 mb-10">Page introuvable</h1>
+						<!--end::Logo-->
+						<!--begin::Message-->
+						<div class="fw-bold fs-3 text-gray-400 mb-15">Ce que vous cherchez n'est pas ici.
+						{% comment %} <br />Plan your blog post by choosing a topic {% endcomment %}
+                        </div>
+						<!--end::Message-->
+						<!--begin::Action-->
+						<div class="text-center">
+							<a href="/" class="btn btn-lg btn-primary fw-bolder">Retour à la Page d'accueil</a>
+						</div>
+						<!--end::Action-->
+					</div>
+					<!--end::Wrapper-->
+				</div>
+				<!--end::Content-->
+			</div>
+			<!--end::Authentication - Error 404-->
+		</div>
+		<!--end::Main-->
+		<!--begin::Javascript-->
+		<!--begin::Global Javascript Bundle(used by all pages)-->
+		{% comment %} <script src="assets/plugins/global/plugins.bundle.js"></script>
+		<script src="assets/js/scripts.bundle.js"></script> {% endcomment %}
+		<!--end::Global Javascript Bundle-->
+		<!--end::Javascript-->
+	</body>
+	<!--end::Body-->
+</html>
