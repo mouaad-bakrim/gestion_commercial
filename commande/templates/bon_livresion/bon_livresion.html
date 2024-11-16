@@ -1,0 +1,198 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block title %}
+Liste des Commandes
+{% endblock %}
+
+{% block css %}
+<link href="{% static 'assets/css/table.css' %}" rel="stylesheet" type="text/css"/>
+{% endblock css %}
+
+{% block toolbar %}
+<div id="kt_app_toolbar" class="app-toolbar mt-1" style="height: 50px;">
+    <!--begin::Toolbar container-->
+    <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+        <!--begin::Page title-->
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <!--begin::Title-->
+            <h1 class="page-heading d-flex text-gray-900 fw-bold fs-3 flex-column justify-content-center my-0">Liste Bon livresion</h1>
+            <!--end::Title-->
+            <!--begin::Breadcrumb-->
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">
+                    <a href="" class="text-muted text-hover-primary">Accueil</a>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-500 w-5px h-2px"></span>
+                </li>
+                <!--end::Item-->
+                <!--begin::Item-->
+                <li class="breadcrumb-item text-muted">Liste Bon livresiont</li>
+                <!--end::Item-->
+            </ul>
+            <!--end::Breadcrumb-->
+        </div>
+        <!--end::Page title-->
+    </div>
+
+    <!-- Align elements with the height of the toolbar -->
+    <div class="d-flex align-items-center gap-2 me-4" style="height: 100%;">
+        <!--begin::Action wrapper-->
+        <div class="d-flex align-items-center">
+            <span class="fs-7 fw-bold text-gray-700 pe-4 text-nowrap d-none d-md-block">Commandes:</span>
+            <span class="badge badge-light-primary fs-base" id="id_nb_orders">0</span>
+        </div>
+
+        <!--end::Action wrapper-->
+        <div class="bullet bg-secondary h-100 w-1px mx-6"></div>
+        <!--begin::Action wrapper-->
+        <div class="d-flex align-items-center">
+            <span class="fs-7 fw-bold text-gray-700 pe-4 text-nowrap d-none d-md-block">Montant:</span>
+            <span class="badge badge-light-primary fs-base" id="id_montant">0,00</span>
+        </div>
+        <!--end::Action wrapper-->
+        <div class="bullet bg-secondary h-100 w-1px mx-6"></div>
+
+        <div class="d-flex align-items-center">
+            <!-- Conteneur pour les messages d'erreur -->
+            <div id="error-message" class="alert alert-danger d-none mt-4" role="alert">
+                Attention : Les bons de livraison appartiennent à des clients différents. Veuillez sélectionner des bons appartenant au même client.
+            </div>
+
+            <form action="{% url 'commande:create_facture' %}" method="post" autocomplete="off" id="acceptForm">
+                {% csrf_token %}
+                <input type="hidden" name="selected_bons" id="selected_bons" value="">
+                <button class="btn btn-block btn-sm btn-primary d-flex align-items-center mt-4 mb-4 " id="accepterBtn" type="button" data-bs-toggle="modal" data-bs-target="#attentionModal" disabled style="width: 120px;">
+                    <span class="menu-icon">
+                        <i class="bi bi-check-circle fs-2"></i>
+                    </span>
+                    Gérer Facture
+                </button>
+            </form>
+
+            <!-- Modal d'attention -->
+            <div class="modal fade" id="attentionModal" tabindex="-1" aria-labelledby="attentionModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="attentionModalLabel">Attention</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            Attention : Les bons de livraison appartiennent à des clients différents. Veuillez sélectionner des bons appartenant au même client.
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+                            <button type="button" class="btn btn-primary" id="confirmAction">Confirmer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+
+{% block content %}
+<!-- Modal HTML -->
+<div class="modal fade" id="errorModal" tabindex="-1" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="errorModalLabel">Erreur</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="errorModalMessage">
+                <!-- Message d'erreur sera injecté ici -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="mt-6">
+    {% include 'base/includes/list_filter.html' %}
+</div>
+
+{% include 'base/includes/list_table.html' %}
+{% endblock content %}
+
+{% block javascript %}
+
+<script src="{% static 'assets/js/jquery.min.js' %}"></script>
+
+<script>
+$(document).ready(function() {
+    function updateTotals() {
+        let selectedRows = $('.checkbox_local:checked');
+        let nombreSelectionnes = selectedRows.length;
+        let montantTotal = 0.0;
+
+        let selectedBons = [];
+        let clients = new Set();
+
+        selectedRows.each(function() {
+            let montantHtCell = $(this).closest('tr').find('td[data-field="montant"]');
+            let montantHtAmount = parseFloat(montantHtCell.text().replace(/[^0-9.,]+/g, "")) || 0;
+            montantTotal += montantHtAmount;
+
+            selectedBons.push($(this).val());
+
+            let clientCell = $(this).closest('tr').find('td[data-field="client"]');
+            let client = clientCell.text().trim();
+            clients.add(client);
+        });
+
+        $('#id_nb_orders').text(nombreSelectionnes);
+        $('#id_montant').text(montantTotal.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, " ").replace('.', ','));
+        $('#selected_bons').val(selectedBons.join(','));
+
+        if (clients.size > 1) {
+            $('#errorModalMessage').text("Attention : Les bons de livraison appartiennent à des clients différents. Veuillez sélectionner des bons appartenant au même client.");
+            $('#errorModal').modal('show');
+            $("#accepterBtn").prop("disabled", true);
+        } else {
+            $('#errorModal').modal('hide');
+            $("#accepterBtn").prop("disabled", nombreSelectionnes === 0);
+        }
+    }
+
+    $(document).on('change', '.checkbox_local', updateTotals);
+    $(document).on('change', '#toggleCB', function() {
+        $('.checkbox_local').prop("checked", this.checked);
+        updateTotals();
+    });
+});
+</script>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+    const confirmButton = document.getElementById('confirmAction');
+    const acceptButton = document.getElementById('accepterBtn');
+
+    confirmButton.addEventListener('click', function() {
+        // Logique pour traiter la demande de gestion de facture
+        console.log('Facture gérée');
+
+        // Ici, tu pourrais soumettre le formulaire ou rediriger l'utilisateur
+        document.getElementById('acceptForm').submit();
+    });
+});
+
+</script>
+{% endblock %}
+

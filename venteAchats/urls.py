@@ -12,4 +12,6 @@ urlpatterns = [
     path('Vente_client/detail/<int:pk>/', views.DetailVenteCLient.as_view(), name='vente_client_detail'),
     # ---------------------- autre -------------------#
     path('get-prices/<int:client_id>/', get_prices, name='get_prices'),
+
+
 ]

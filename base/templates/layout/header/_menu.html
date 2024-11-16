@@ -182,75 +182,75 @@
 
 									<!------------------------------------------------------------------------------------------->
 
-								<div class="app-navbar-item ms-1 ms-md-4" id="kt_header_user_menu_toggle">
-									<!--begin::Menu wrapper-->
-									<div class="cursor-pointer symbol symbol-35px" data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end">
-										<img src="{% static 'assets/media/avatars/blank.png' %}" class="rounded-3" alt="user" />
-									</div>
-									<!--begin::User account menu-->
-									<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true">
-										<!--begin::Menu item-->
-										<div class="menu-item px-3">
-											<div class="menu-content d-flex align-items-center px-3">
-												<!--begin::Avatar-->
-												<div class="symbol symbol-50px me-5">
-													<img alt="Logo" src="{% static 'assets/media/avatars/blank.png' %}" />
-												</div>
-												<!--end::Avatar-->
-												<!--begin::Username-->
-												<div class="d-flex flex-column">
-													<div class="fw-bold d-flex align-items-center fs-5">{{user.get_full_name}}
-													</div>
-													<a href="#" class="fw-semibold text-muted text-hover-primary fs-7">{{user.email}}</a>
-												</div>
-												<!--end::Username-->
-											</div>
-										</div>
-										<!--end::Menu item-->
-										<!--begin::Menu separator-->
-										<div class="separator my-2"></div>
-										<!--end::Menu separator-->
-										<!--begin::Menu item-->
-										{% if user.is_superuser %}
-
-										<div class="menu-item px-5">
-											<a href="/admin/" class="menu-link px-5">Accès Admin</a>
-										</div>
-										{% endif %}
-
-										<div class="separator my-2"></div>
-										<div class="menu-item px-5">
-											<a href="" class="menu-link px-5">Sécurité et connexion</a>
-										</div>
-
-
-										<div class="menu-item px-5">
-											<a href="" class="menu-link px-5">Mon compte</a>
-										</div>
-										<!--end::Menu separator-->
+								<!-- User Menu Section -->
+<!-- User Menu Section -->
+<div class="app-navbar-item ms-1 ms-md-4" id="kt_header_user_menu_toggle" aria-haspopup="true" aria-expanded="false">
+<div class="cursor-pointer d-flex align-items-center p-1" data-kt-menu-trigger="{default: 'click', lg: 'hover'}"
+     data-kt-menu-attach="parent" data-kt-menu-placement="bottom-end"
+     style="border: 2px solid #ddd; border-radius: 10px; width: 120px; background-color: #f9f9f9; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); transition: all 0.3s;">
+    <img src="{% static 'assets/media/avatars/blank.png' %}" class="rounded-circle border border-light" alt="User Avatar" style="width: 35px; height: 35px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);" />
+    <span class="ms-3 fs-6 fw-bold text-dark">{{ user.get_full_name }}</span>
+</div>
 
 
 
-										<!--end::Menu item-->
-										<!--begin::Menu item-->
-										<div class="menu-item px-5">
-											<a href="{% url 'base:logout' %}" class="menu-link px-5">Se déconnecter</a>
-										</div>
-										<!--end::Menu item-->
-									</div>
-									<!--end::User account menu-->
-									<!--end::Menu wrapper-->
-								</div>
 
-								<!--begin::Header menu toggle-->
-								<div class="app-navbar-item d-lg-none ms-2 me-n2" title="Show header menu">
-									<div class="btn btn-flex btn-icon btn-active-color-primary w-30px h-30px" id="kt_app_header_menu_toggle">
-										<i class="ki-duotone ki-element-4 fs-1">
-											<span class="path1"></span>
-											<span class="path2"></span>
-										</i>
-									</div>
-								</div>
+
+
+
+
+    <!-- User Menu Dropdown -->
+    <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg menu-state-color fw-semibold py-4 fs-6 w-275px" data-kt-menu="true" aria-label="User Menu">
+
+        <!-- User Info Section -->
+        <div class="menu-item px-3">
+            <div class="menu-content d-flex align-items-center px-3">
+                <div class="symbol symbol-50px me-4">
+                    <img alt="User Avatar" src="{% static 'assets/media/avatars/blank.png' %}" class="rounded-circle" />
+                </div>
+                <div class="d-flex flex-column">
+                    <div class="fw-bold text-dark fs-5">{{ user.get_full_name }}</div>
+                    <a href="mailto:{{ user.email }}" class="text-muted text-hover-primary fs-7">{{ user.email }}</a>
+                </div>
+            </div>
+        </div>
+        <div class="separator my-2"></div>
+
+        <!-- Admin Access (Visible only for superusers) -->
+        {% if user.is_superuser %}
+        <div class="menu-item px-5">
+            <a href="/admin/" class="menu-link px-5 text-warning">Admin Dashboard</a>
+        </div>
+        {% endif %}
+
+        <!-- Menu Items -->
+        <div class="separator my-2"></div>
+        <div class="menu-item px-5">
+            <a href="#" class="menu-link px-5">Security & Login</a>
+        </div>
+        <div class="menu-item px-5">
+            <a href="#" class="menu-link px-5">My Account</a>
+        </div>
+
+        <div class="separator my-2"></div>
+
+        <!-- Logout Section -->
+        <div class="menu-item px-5">
+            <a href="{% url 'base:logout' %}" class="menu-link px-5" aria-label="Logout">Log Out</a>
+        </div>
+    </div>
+</div>
+
+<!-- Mobile Menu Toggle Button -->
+<div class="app-navbar-item d-lg-none ms-2 me-n2" title="Show Header Menu">
+    <div class="btn btn-flex btn-icon btn-active-color-primary w-30px h-30px" id="kt_app_header_menu_toggle" aria-controls="header-menu" aria-expanded="false">
+        <i class="ki-duotone ki-element-4 fs-1">
+            <span class="path1"></span>
+            <span class="path2"></span>
+        </i>
+    </div>
+</div>
+
 								<!--end::Header menu toggle-->
 								<!--begin::Aside toggle-->
 								

@@ -194,6 +194,7 @@
                                 </a>
                                 <!--end:Menu link-->
                             </div>
+
                                <div class="menu-item">
                                 <!--begin:Menu link-->
 
@@ -206,6 +207,31 @@
                                 </a>
                                 <!--end:Menu link-->
                             </div>
+                             <div class="menu-item">
+                                <!--begin:Menu link-->
+
+                                <a class="menu-link {% if active_item == 'bon_livresion'  and active_menu == 'bon_livresions'  %}active{% endif %}"
+                                       href="{% url 'commande:bon_livresion' %}">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                    <span class="menu-title">Liste Bon Livresion</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+                              <div class="menu-item">
+                                <!--begin:Menu link-->
+
+                                <a class="menu-link {% if active_item == 'bon_livresion'  and active_menu == 'bon_livresions'  %}active{% endif %}"
+                                       href="{% url 'commande:factur' %}">
+												<span class="menu-bullet">
+													<span class="bullet bullet-dot"></span>
+												</span>
+                                    <span class="menu-title">facture</span>
+                                </a>
+                                <!--end:Menu link-->
+                            </div>
+
 
                         </div>
                         <!--end:Menu sub-->
